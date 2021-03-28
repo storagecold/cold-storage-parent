@@ -1,0 +1,1199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cold.storage</groupId>
+    <artifactId>cold-storage-parent</artifactId>
+    <version>1.0-SNAPSHOT</version> <!-- needs to be changed before release to 1.0.${build.number}-->
+    <packaging>pom</packaging>
+
+    <properties>
+        <BUILD_NUMBER>local</BUILD_NUMBER>
+        <build.number>${BUILD_NUMBER}</build.number>
+        <java.version>1.8</java.version>
+        <java.source.version>${java.version}</java.source.version>
+        <java.target.version>${java.version}</java.target.version>
+        <logback.version>0.1.5</logback.version>
+        <lombok.version>1.18.2</lombok.version>
+        <skipTests>false</skipTests>
+
+        <!-- Maven -->
+        <maven.surefire.plugin.version>3.0.0-M3</maven.surefire.plugin.version>
+
+        <!-- spring properties-->
+        <spring-boot.version>2.1.4.RELEASE</spring-boot.version>
+        <spring-cloud-config.version>2.1.1.RELEASE</spring-cloud-config.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
+        <spring-cloud-stream.version>2.1.2.RELEASE</spring-cloud-stream.version>
+        <!--<spring-cloud-dependencies>Greenwich.SR1</spring-cloud-dependencies>-->
+
+        <splunk-library-javalogging.version>1.7.2</splunk-library-javalogging.version>
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <swagger-models.version>1.5.22</swagger-models.version>
+
+        <!-- aspect properties -->
+        <aspectj.version>1.9.4</aspectj.version>
+        <aspectj-maven-plugin-version>1.11</aspectj-maven-plugin-version>
+        <aspectj.weavedirectory>${project.build.directory}/classes/com/optum/eligibility</aspectj.weavedirectory>
+
+        <!-- Unit test properties-->
+        <junit.version>5.5.2</junit.version>
+              <sonar.host.url>http://sonar.optum.com/</sonar.host.url>
+        <sonar.login>092c919905283a6d35ff1abe2128fc52e48a6156</sonar.login>
+
+        <!-- Apache Maven plugins -->
+        <antrun.version>1.8</antrun.version>
+        <android.maven.version>3.8.2</android.maven.version>
+        <assembly.version>3.1.0</assembly.version>
+        <bundle.version>3.5.0</bundle.version>
+        <checkstyle.version>3.0.0</checkstyle.version>
+        <clean.version>3.0.0</clean.version>
+        <compiler.version>3.7.0</compiler.version>
+        <dependency.version>3.0.2</dependency.version>
+        <deploy.version>2.8.2</deploy.version>
+        <ear.version>2.10.1</ear.version>
+        <ejb.version>3.0.0</ejb.version>
+        <failsafe.version>2.20.1</failsafe.version>
+        <help.version>2.2</help.version>
+        <install.version>2.5.2</install.version>
+        <jar.version>3.0.2</jar.version>
+        <javadoc.version>3.0.0</javadoc.version>
+        <jxr.version>2.5</jxr.version>
+        <pmd.version>3.8</pmd.version>
+        <project-info-reports.version>2.9</project-info-reports.version>
+        <resources.version>3.0.2</resources.version>
+        <site.version>3.7</site.version>
+        <source.version>3.0.1</source.version>
+        <surefire.version>2.20.1</surefire.version>
+        <war.version>3.2.0</war.version>
+
+        <!-- Codehaus plugins -->
+        <cobertura.version>2.7</cobertura.version>
+        <findbugs.version>3.0.5</findbugs.version>
+        <jdepend.version>2.0</jdepend.version>
+        <taglist.version>2.4</taglist.version>
+        <maven-report.version>0.1</maven-report.version> <!-- http://docs.codehaus.org/display/SONAR/Maven+Report+Plugin -->
+        
+        <!-- Other Maven plugins -->
+        <git-commit-id.version>2.2.3</git-commit-id.version>
+        
+        <distMgmt.Rel.Id>UHG-Releases</distMgmt.Rel.Id>
+        <distMgmt.Rel.Name>Local Repository for UHG Application Releases</distMgmt.Rel.Name>
+        <distMgmt.Rel.Url>https://repo1${ci.env}.uhc.com/artifactory/UHG-Releases</distMgmt.Rel.Url>
+        <distMgmt.Snap.Id>UHG-Snapshots</distMgmt.Snap.Id>
+        <distMgmt.Snap.Name>Local Repository for UHG Application Snapshots</distMgmt.Snap.Name>
+        <distMgmt.Snap.Url>https://repo1${ci.env}.uhc.com/artifactory/UHG-Snapshots</distMgmt.Snap.Url>
+        
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+    </properties>
+
+    <dependencies>
+        <!-- used to add annotation for boilerplate code. i.e. getter, setter logging-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <!--<scope>optional</scope>-->
+        </dependency>
+
+        <dependency>  <!--This dependency already included in spring-boot-starter-->
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-json-classic</artifactId>
+            <version>${logback.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.contrib</groupId>
+            <artifactId>logback-jackson</artifactId>
+            <version>${logback.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <!-- Spring Web Client -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-config</artifactId>
+                <version>${spring-cloud-config.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-config-server</artifactId>
+                <version>${spring-cloud-config.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <exclusions>
+                    <exclusion> <!-- Exclude because newer version already declared in spring-cloud-started-config -->
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                        <artifactId>jackson-databind</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-test-support</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- swagger related dependencies-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.swagger</groupId>
+                        <artifactId>swagger-models</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+                <version>${swagger-models.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+
+            <!-- Dependencies for splunk -->
+            <dependency>
+                <groupId>com.splunk.logging</groupId>
+                <artifactId>splunk-library-javalogging</artifactId>
+                <version>${splunk-library-javalogging.version}</version>
+                <!-- exclude log4j jar as these are already added as part of spring dependencies -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.logging.log4j</groupId>
+                        <artifactId>log4j-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.code.gson</groupId>
+                        <artifactId>gson</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <version>${spring-boot.version}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                            <!--<configuration>-->
+                            <!--<mainClass>${spring.boot.mainclass}</mainClass>-->
+                            <!--</configuration>-->
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>${aspectj-maven-plugin-version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.aspectj</groupId>
+                            <artifactId>aspectjtools</artifactId>
+                            <version>${aspectj.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <complianceLevel>${java.version}</complianceLevel>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <showWeaveInfo>true</showWeaveInfo>
+                        <verbose>true</verbose>
+                        <Xlint>ignore</Xlint>
+                        <encoding>UTF-8 </encoding>
+                        <includes>
+                            <include>**/*Aspect.java</include>
+                        </includes>
+                        <forceAjcCompile>true</forceAjcCompile>
+                        <sources>
+                            <source>
+                                <basedir>src/main/java/com/optum/eligibility</basedir>
+                                    <includes>
+                                        <include>**/Aspect.java</include>
+                                    </includes>
+                            </source>
+                        </sources>
+                        <weaveDirectories>
+                            <weaveDirectory>${aspectj.weavedirectory}</weaveDirectory>
+                        </weaveDirectories>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <!-- use this goal to weave all your main classes -->
+                                <goal>test-compile</goal>
+                                <goal>compile</goal>
+                                <!-- use this goal to weave all your test classes -->
+                                <!--<goal>test-compile</goal>-->
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+      
+              <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${antrun.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${assembly.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>${clean.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${dependency.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${deploy.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ear-plugin</artifactId>
+                    <version>${ear.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>${ejb.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${failsafe.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>${help.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${install.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${jar.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jxr-plugin</artifactId>
+                    <version>${jxr.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${pmd.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${resources.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${site.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${source.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${war.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>${cobertura.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findbugs.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jdepend-maven-plugin</artifactId>
+                    <version>${jdepend.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>taglist-maven-plugin</artifactId>
+                    <version>${taglist.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.sonar-plugins</groupId>
+                    <artifactId>maven-report</artifactId>
+                    <version>${maven-report.version}</version>
+                </plugin>
+                <plugin>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>maven-bundle-plugin</artifactId>
+                  <version>${bundle.version}</version>
+                  <configuration>
+                    <instructions>
+                      <BuildVersion>${build.number}</BuildVersion>
+                      <SCMPath>${repo.url}</SCMPath>
+                      <SCMBranch>${repo.branch}</SCMBranch>
+                      <SCMRevision>${repo.revision}</SCMRevision>
+                      <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                    </instructions>
+                  </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <configuration>
+                <archive>
+                  <manifestEntries>
+                    <BuildVersion>${build.number}</BuildVersion>
+                    <SCMPath>${repo.url}</SCMPath>
+                    <SCMBranch>${repo.branch}</SCMBranch>
+                    <SCMRevision>${repo.revision}</SCMRevision>
+                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                  </manifestEntries>
+                </archive>
+              </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <BuildVersion>${build.number}</BuildVersion>
+                            <SCMPath>${repo.url}</SCMPath>
+                            <SCMBranch>${repo.branch}</SCMBranch>
+                            <SCMRevision>${repo.revision}</SCMRevision>
+                            <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <BuildVersion>${build.number}</BuildVersion>
+                            <SCMPath>${repo.url}</SCMPath>
+                            <SCMBranch>${repo.branch}</SCMBranch>
+                            <SCMRevision>${repo.revision}</SCMRevision>
+                            <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-ear-plugin</artifactId>
+              <configuration>
+                <archive>
+                  <manifestEntries>
+                    <BuildVersion>${build.number}</BuildVersion>
+                    <SCMPath>${repo.url}</SCMPath>
+                    <SCMBranch>${repo.branch}</SCMBranch>
+                    <SCMRevision>${repo.revision}</SCMRevision>
+                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                  </manifestEntries>
+                </archive>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.felix</groupId>
+              <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+
+        <!-- Profiles for Java Standard Edition (JSE a.k.a JDK/SDK) -->
+        <!-- http://java.sun.com/javase/reference/api.jsp -->
+        <profile>
+            <!-- Profile for JSE 4 -->
+            <id>jse4</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.4</source>
+                            <target>1.4</target>
+                            <!--Default to NOT fork since it require extra setup in AHP. See ADIS Doc on Java on Path -->
+                            <fork>false</fork>
+                            <verbose>false</verbose>
+                            <compilerVersion>1.4</compilerVersion>
+                            </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <reporting>
+             <plugins>
+                 <plugin><!-- Javadoc Configuration -->
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-javadoc-plugin</artifactId>
+                     <version>${javadoc.version}</version>
+                     <configuration>
+                         <links>
+                             <link>
+                                 http://java.sun.com/j2se/1.4.2/docs/api/
+                             </link>
+                             <link>
+                                 http://static.springsource.org/spring/docs/3.0.x/javadoc-api/
+                             </link>
+                         </links>
+                     </configuration>
+                 </plugin>
+             </plugins>
+         </reporting>
+        </profile>
+
+        <profile>
+            <!-- Profile for JSE 5 -->
+            <id>jse5</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.5</source>
+                            <target>1.5</target>
+                            <!--Default to NOT fork since it require extra setup in AHP. See ADIS Doc on Java on Path -->
+                            <fork>false</fork>
+                            <verbose>false</verbose>
+                            <compilerVersion>1.5</compilerVersion>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <reporting>
+                <plugins>
+                    <plugin><!-- Javadoc Configuration -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${javadoc.version}</version>
+                        <configuration>
+                            <links>
+                                <link>
+                                    http://java.sun.com/j2se/1.5.0/docs/api/
+                                </link>
+                                <link>
+                                    http://static.springsource.org/spring/docs/3.0.x/javadoc-api/
+                                </link>
+                            </links>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+
+        <profile>
+            <!-- Profile for JSE 6 -->
+            <id>jse6</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.6</source>
+                            <target>1.6</target>
+                            <fork>false</fork>
+                            <verbose>false</verbose>
+                            <compilerVersion>1.6</compilerVersion>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <reporting>
+                <plugins>
+                    <plugin><!-- Javadoc Configuration -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${javadoc.version}</version>
+                        <configuration>
+                            <links>
+                                <link>
+                                    http://java.sun.com/javase/6/docs/api/
+                                </link>
+                                <link>
+                                    http://static.springsource.org/spring/docs/3.0.x/javadoc-api/
+                                </link>
+                            </links>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+
+        <profile>
+            <!-- Profile for JSE 7 -->
+            <id>jse7</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.7</source>
+                            <target>1.7</target>
+                            <fork>false</fork>
+                            <verbose>false</verbose>
+                            <compilerVersion>1.7</compilerVersion>
+                        </configuration>
+                    </plugin>
+                    <!-- See this link for explanation why the UseSplitVerifier option is passed -->
+                    <!-- http://stackoverflow.com/questions/7010665/testng-emma-cobertura-coverage-and-jdk-7-result-in-classformaterror-and-verif/9583305#9583305 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>-XX:-UseSplitVerifier</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <reporting>
+                <plugins>
+                    <plugin><!-- Javadoc Configuration -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${javadoc.version}</version>
+                        <configuration>
+                            <links>
+                                <link>
+                                    http://java.sun.com/javase/7/docs/api/
+                                </link>
+                                <link>
+                                    http://static.springsource.org/spring/docs/3.0.x/javadoc-api/
+                                </link>
+                            </links>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+
+        <profile>
+            <!-- Profile for JSE 8 -->
+            <!-- Profile used with all Jenkins builds -->
+            <!-- Changed pom to automatically active the jse8 profile based on the non-existent
+                 property "skipJse8Profile. If you want to deactivate this profile, add
+                 -DskipJse8Profile to the Maven command line.
+                 Found this technique from:
+                 http://stackoverflow.com/questions/5309379/how-to-keep-maven-profiles-which-are-activebydefault-active-even-if-another-prof
+                 -->
+            <id>jse8</id>
+            <activation>
+                <property>
+                    <name>!skipJse8Profile</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                            <fork>false</fork>
+                            <verbose>false</verbose>
+                            <compilerVersion>1.8</compilerVersion>
+                        </configuration>
+                    </plugin>
+                    <!-- is this still an issue with java 8? i'll leave this in for now, need to investigate -->
+                    <!-- See this link for explanation why the UseSplitVerifier option is passed -->
+                    <!-- http://stackoverflow.com/questions/7010665/testng-emma-cobertura-coverage-and-jdk-7-result-in-classformaterror-and-verif/9583305#9583305 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>-XX:-UseSplitVerifier</argLine>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <reporting>
+                <plugins>
+                    <plugin><!-- Javadoc Configuration -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${javadoc.version}</version>
+                        <configuration>
+                            <links>
+                                <link>
+                                    http://java.sun.com/javase/8/docs/api/
+                                </link>
+                                <link>
+                                    http://static.springsource.org/spring/docs/3.0.x/javadoc-api/
+                                </link>
+                            </links>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+
+        <!-- Profiles for Java Enterprise Edition (JEE) -->
+        <!-- http://java.sun.com/javaee/reference/apis/ -->
+        <profile>
+            <!-- Profile for JEE 4 -->
+            <!-- http://java.sun.com/j2ee/1.4/docs/api/ -->
+            <id>jee4</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifestEntries>
+                                    <BuildVersion>${build.number}</BuildVersion>
+                                    <SCMPath>${repo.url}</SCMPath>
+                                    <SCMBranch>${repo.branch}</SCMBranch>
+                                    <SCMRevision>${repo.revision}</SCMRevision>
+                                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-ear-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifestEntries>
+                                    <BuildVersion>${build.number}</BuildVersion>
+                                    <SCMPath>${repo.url}</SCMPath>
+                                    <SCMBranch>${repo.branch}</SCMBranch>
+                                    <SCMRevision>${repo.revision}</SCMRevision>
+                                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Profile for JEE 5 -->
+            <!-- http://java.sun.com/javaee/5/docs/api/ -->
+            <id>jee5</id>
+            <activation>
+                <property>
+                    <name>!skipJee5Profile</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                            </manifest>
+                            <manifestEntries>
+                                <BuildVersion>${build.number}</BuildVersion>
+                                <SCMPath>${repo.url}</SCMPath>
+                                <SCMBranch>${repo.branch}</SCMBranch>
+                                <SCMRevision>${repo.revision}</SCMRevision>
+                                <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                            </manifestEntries>
+                        </archive>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-ear-plugin</artifactId>
+                        <configuration>
+                            <defaultJavaBundleDir>lib/</defaultJavaBundleDir>
+                            <archive>
+                                <manifestEntries>
+                                    <BuildVersion>${build.number}</BuildVersion>
+                                    <SCMPath>${repo.url}</SCMPath>
+                                    <SCMBranch>${repo.branch}</SCMBranch>
+                                    <SCMRevision>${repo.revision}</SCMRevision>
+                                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Profile for JEE 6 -->
+            <!-- http://java.sun.com/javaee/6/docs/api/ -->
+            <id>jee6</id>
+            <build>
+                <plugins>
+                    <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                            </manifest>
+                            <manifestEntries>
+                                <BuildVersion>${build.number}</BuildVersion>
+                                <SCMPath>${repo.url}</SCMPath>
+                                <SCMBranch>${repo.branch}</SCMBranch>
+                                <SCMRevision>${repo.revision}</SCMRevision>
+                                <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                            </manifestEntries>
+                        </archive>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-ear-plugin</artifactId>
+                        <configuration>
+                            <defaultJavaBundleDir>lib/</defaultJavaBundleDir>
+                            <archive>
+                                <manifestEntries>
+                                    <BuildVersion>${build.number}</BuildVersion>
+                                    <SCMPath>${repo.url}</SCMPath>
+                                    <SCMBranch>${repo.branch}</SCMBranch>
+                                    <SCMRevision>${repo.revision}</SCMRevision>
+                                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Profile for JEE 7 -->
+            <!-- https://docs.oracle.com/javaee/7/api/ -->
+            <id>jee7</id>
+            <build>
+                <plugins>
+                    <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                            </manifest>
+                            <manifestEntries>
+                                <BuildVersion>${build.number}</BuildVersion>
+                                <SCMPath>${repo.url}</SCMPath>
+                                <SCMBranch>${repo.branch}</SCMBranch>
+                                <SCMRevision>${repo.revision}</SCMRevision>
+                                <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                            </manifestEntries>
+                        </archive>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-ear-plugin</artifactId>
+                        <configuration>
+                            <defaultJavaBundleDir>lib/</defaultJavaBundleDir>
+                            <archive>
+                                <manifestEntries>
+                                    <BuildVersion>${build.number}</BuildVersion>
+                                    <SCMPath>${repo.url}</SCMPath>
+                                    <SCMBranch>${repo.branch}</SCMBranch>
+                                    <SCMRevision>${repo.revision}</SCMRevision>
+                                    <WorkSpaceDate>${build.time}</WorkSpaceDate>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profiles for Maven versions -->
+        <!-- Profile for Maven 2.x -->
+        <profile>
+            <id>mvn2</id>
+            <activation>
+                <file>
+                    <!-- basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
+                    <missing>${basedir}</missing>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+ 						            <groupId>org.sonarsource.scanner.maven</groupId>
+						            <artifactId>sonar-maven-plugin</artifactId>
+						            <version>3.4.0.905</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Profile for Maven 3.x -->
+        <profile>
+            <id>mvn3</id>
+            <activation>
+                <file>
+                    <!-- basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
+                    <exists>${basedir}</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+ 						            <groupId>org.sonarsource.scanner.maven</groupId>
+						            <artifactId>sonar-maven-plugin</artifactId>
+						            <version>3.4.0.905</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Profile for Running Android Maven builds -->
+            <!--
+                This profile is intened to only be activated with an Android Maven build.
+            -->
+            <id>android</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                            <artifactId>android-maven-plugin</artifactId>
+                            <version>${android.maven.version}</version>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+        <profile>
+            <!-- Profile for Running Integration tests using the failsafe plugin -->
+            <!--
+                This profile is intened to only be activated with a scheduled nightly
+                workflow for running integration tests.
+            -->
+            <id>integration-tests</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${failsafe.version}</version>
+                            <executions>
+                                <execution>
+                                    <id>integration-test</id>
+                                    <goals>
+                                        <goal>integration-test</goal>
+                                        <goal>verify</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!-- Profile for Git -->
+        <profile>
+            <id>git</id>
+            <activation>
+                <file>
+                    <exists>${basedir}/.git</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- details documentation can be retrieved -->
+                        <!-- https://github.com/ktoso/maven-git-commit-id-plugin -->
+                        <groupId>pl.project13.maven</groupId>
+                        <artifactId>git-commit-id-plugin</artifactId>
+                        <version>${git-commit-id.version}</version>
+                        <executions>
+                            <execution>
+                                <id>get-the-git-infos</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>revision</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+                            <dateFormatTimeZone>${user.timezone}</dateFormatTimeZone>
+                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                            <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+                            <format>properties</format>
+                            <skipPoms>false</skipPoms>
+                            <injectAllReactorProjects>false</injectAllReactorProjects>
+                            <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                            <abbrevLength>7</abbrevLength>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+        <!-- Profile for verbose -->
+        <profile>
+            <id>verboseProperty</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${antrun.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                    <goals>
+                                        <goal>run</goal>
+                                    </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <tasks>
+                                <echoproperties/>
+                            </tasks>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <!-- Repositories in Artifactory for business units where artifacts
+                 are distributed.  -->
+        <!-- The repositories need to be created in Artifactory for business
+                 units that are just beginning to use the Maven/Artifactory build
+                 process. Then replace all occurences of "BusinessUnit" with the
+                 actual name. -->
+        <repository>
+            <id>${distMgmt.Rel.Id}</id>
+            <name>${distMgmt.Rel.Name}</name>
+            <url>${distMgmt.Rel.Url}</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>${distMgmt.Snap.Id}</id>
+            <name>${distMgmt.Snap.Name}</name>
+            <url>${distMgmt.Snap.Url}</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!-- Project Information for Site reports -->
+    <!--inceptionYear>2014</inceptionYear-->
+    <name>${project.artifactId}</name>
+
+    <description>
+            ...built ${build.time} as: ${build.number} from
+            BuildLife#: ${buildLifeId}. Built from ${repo.url}
+    </description>
+
+    <!-- Build Environment -->
+    <!-- Environment Information -->
+    <!-- issueManagement>...</issueManagement -->
+    <!-- mailingLists>...</mailingLists -->
+    <scm>
+        <connection>
+            scm:${repo.type}:${repo.url}
+        </connection>
+        <developerConnection>
+            scm:${repo.type}:${repo.url}
+        </developerConnection>
+        <url>
+            ${repo.url}
+        </url>
+    </scm>
+    <!-- End Project Information for Site reports -->
+    </build>
+
+</project>
